@@ -20,6 +20,17 @@ public class UserController {
         return ResponseEntity.ok(userService.registerUser(user));
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable Long id){
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user){
+        return ResponseEntity.ok(userService.updateUser(id, user));
+    }
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         return ResponseEntity.ok(userService.findAllUsers());
