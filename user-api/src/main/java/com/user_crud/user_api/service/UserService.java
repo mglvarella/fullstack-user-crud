@@ -1,6 +1,8 @@
 package com.user_crud.user_api.service;
 
 import com.user_crud.user_api.domain.User;
+import com.user_crud.user_api.domain.UserRequestDTO;
+import com.user_crud.user_api.domain.UserResponseDTO;
 import com.user_crud.user_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User registerUser(User user){
-        return userRepository.save(user);
+    public UserResponseDTO registerUser(UserRequestDTO data){
+        User userToRegister = new User(data.name(), data.doc(), data.email(), data.phone());
+        User newUser = userRepository.save(userToRegister);
+
+        return new UserResponseDTO(newUser.getId(), newUser.getName(), newUser.getDoc(), newUser.getEmail(), newUser.getPhone());
     }
 
     public void deleteUserById(Long id){
@@ -28,29 +33,41 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(Long id, User data){
-        User userToUpdate = userRepository.findById(id)
+    public UserResponseDTO updateUser(Long id, UserRequestDTO data) {
+        User user = userRepository.findById(id)
                 .orElseThrow();
 
-        if(!userToUpdate.getName().equals(data.getName())){
-            userToUpdate.setName(data.getName());
-        }
-        if(!userToUpdate.getEmail().equals(data.getEmail())){
-            userToUpdate.setEmail(data.getEmail());
-        }
-        if(!userToUpdate.getPhone().equals(data.getPhone())){
-            userToUpdate.setPhone(data.getPhone());
-        }
+        user.setName(data.name());
+        user.setEmail(data.email());
+        user.setPhone(data.phone());
 
-        return userToUpdate;
+        return new UserResponseDTO(user.getId(), user.getName(), user.getDoc(), user.getEmail(), user.getPhone());
     }
 
-    public List<User> findAllUsers(){
-        return userRepository.findAll();
+
+    public List<UserResponseDTO> findAllUsers(){
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getName(),
+                        user.getDoc(),
+                        user.getEmail(),
+                        user.getPhone()
+                ))
+                .toList();
     }
 
-    public User findUserById(Long id){
-        return userRepository.findById(id)
+    public UserResponseDTO findUserById(Long id){
+        User user = userRepository.findById(id)
                 .orElseThrow();
+
+        return new UserResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getDoc(),
+                user.getEmail(),
+                user.getPhone()
+        );
     }
 }

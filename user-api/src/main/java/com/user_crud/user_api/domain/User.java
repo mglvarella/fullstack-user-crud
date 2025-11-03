@@ -20,4 +20,11 @@ public class User{
     private String doc;
     private String email;
     private String phone;
+
+    public User(String name, String doc, String email, String phone) {
+        this.name = name;
+        this.doc = doc;
+        this.email = email;
+        this.phone = phone;
+    }
 }
