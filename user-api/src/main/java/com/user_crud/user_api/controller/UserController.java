@@ -5,7 +5,9 @@ import com.user_crud.user_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,17 +20,24 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO data){
-        return ResponseEntity.ok(userService.registerUser(data));
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO data, UriComponentsBuilder uriBuilder) {
+        UserResponseDTO createdUser = userService.registerUser(data);
+
+        URI uri = uriBuilder
+                .path("/users/{id}")
+                .buildAndExpand(createdUser.id())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(createdUser);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO data){
         return ResponseEntity.ok(userService.updateUser(id, data));
     }

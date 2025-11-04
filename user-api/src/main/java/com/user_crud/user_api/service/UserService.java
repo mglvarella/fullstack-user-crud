@@ -4,6 +4,7 @@ import com.user_crud.user_api.domain.User;
 import com.user_crud.user_api.domain.UserRequestDTO;
 import com.user_crud.user_api.domain.UserResponseDTO;
 import com.user_crud.user_api.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,14 +29,14 @@ public class UserService {
 
     public void deleteUserById(Long id){
         User userToDelete = userRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("The user " + id + " could not be found"));
         userRepository.delete(userToDelete);
     }
 
     @Transactional
     public UserResponseDTO updateUser(Long id, UserRequestDTO data) {
         User user = userRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("The user " + id + " could not be found"));
 
         user.setName(data.name());
         user.setEmail(data.email());
@@ -43,7 +44,6 @@ public class UserService {
 
         return new UserResponseDTO(user.getId(), user.getName(), user.getDoc(), user.getEmail(), user.getPhone());
     }
-
 
     public List<UserResponseDTO> findAllUsers(){
         return userRepository.findAll()
@@ -60,7 +60,7 @@ public class UserService {
 
     public UserResponseDTO findUserById(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("The user " + id + " could not be found"));
 
         return new UserResponseDTO(
                 user.getId(),
