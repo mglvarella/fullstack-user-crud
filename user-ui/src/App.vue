@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import UserForm from './user/UserForm.vue';
 
 </script>
 
 <template>
-  <UserForm/>
+  <router-view />
 </template>
+
+<script setup lang="ts">
+</script>
 
 <style scoped></style>

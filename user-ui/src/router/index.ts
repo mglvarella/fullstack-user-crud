@@ -1,8 +1,23 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import UserForm from '@/user/UserForm.vue';
+import UserList from '@/user/UserList.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'Form',
+    component: UserForm
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: UserList
+  }
+];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [],
-})
+  history: createWebHistory(),
+  routes
+});
 
-export default router
+export default router;

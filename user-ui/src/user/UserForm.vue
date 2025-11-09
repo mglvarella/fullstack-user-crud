@@ -1,3 +1,55 @@
+<template>
+  <div>
+    <AppHeader class="fixed-top shadow-sm" />
+
+     <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center flex-column" style="padding-top: 70px;">
+      
+      <form class="p-4 bg-light rounded shadow-sm w-100" style="max-width: 600px;" @submit="handleSubmit">
+        <h2 class="mb-4 text-center" style="color: #14AFA0; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">
+            Cadastro
+        </h2>
+
+        <div class="mb-3">
+          <label for="name" class="form-label">Nome do usuário</label>
+          <input type="text" class="form-control" id="name" placeholder="Seu nome completo" v-model="formData.name" />
+          <div v-if="errors.name" class="text-danger mt-1">{{ errors.name }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="doc" class="form-label">CPF/CNPJ</label>
+          <input type="text" class="form-control" id="doc" placeholder="Digite seu CPF ou CNPJ" v-model="formData.doc" />
+          <div v-if="errors.doc" class="text-danger mt-1">{{ errors.doc }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="seu@email.com" v-model="formData.email" />
+          <div v-if="errors.email" class="text-danger mt-1">{{ errors.email }}</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Telefone</label>
+          <input type="tel" class="form-control" id="phone" placeholder="(xx) xxxxx-xxxx" v-model="formData.phone" />
+          <div v-if="errors.phone" class="text-danger mt-1">{{ errors.phone }}</div>
+        </div>
+
+        <div class="mb-3 text-center">
+          <div v-if="successMessage" class="text-success mb-2">{{ successMessage }}</div>
+          <div v-if="errorMessage" class="text-danger mb-2">{{ errorMessage }}</div>
+        </div>
+
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-secondary me-2" :disabled="loading">Cancelar</button>
+          <button type="submit" class="btn btn-primary" :disabled="loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm me-1"></span>
+            Enviar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import AppHeader from '@/shared/AppHeader.vue';
 import { onMounted, reactive, ref } from 'vue';
@@ -42,8 +94,6 @@ const errorMessage = ref('');
 
 const validateForm = () => {
   let valid = true;
-
-  // Limpa erros antigos
   errors.name = '';
   errors.doc = '';
   errors.email = '';
@@ -78,7 +128,7 @@ const validateForm = () => {
 const handleSubmit = async (e: Event) => {
   e.preventDefault();
 
-  if (!validateForm()) return; // não envia se front não validar
+  if (!validateForm()) return;
 
   loading.value = true;
   successMessage.value = '';
@@ -105,52 +155,3 @@ const handleSubmit = async (e: Event) => {
   }
 };
 </script>
-
-<template>
-  <div class="container-fluid bg-body-tertiary min-vh-100 d-flex justify-content-center align-items-center flex-column">
-    <AppHeader />
-
-    <div style="height: 70px;"></div>
-
-    <form class="p-4 bg-light rounded shadow-sm w-100" style="max-width: 600px;" @submit="handleSubmit">
-      <h2 class="mb-4 text-center">Cadastro</h2>
-
-      <div class="mb-3">
-        <label for="name" class="form-label">Nome do usuário</label>
-        <input type="text" class="form-control" id="name" placeholder="Seu nome completo" v-model="formData.name" />
-        <div v-if="errors.name" class="text-danger mt-1">{{ errors.name }}</div>
-      </div>
-
-      <div class="mb-3">
-        <label for="doc" class="form-label">CPF/CNPJ</label>
-        <input type="text" class="form-control" id="doc" placeholder="Digite seu CPF ou CNPJ" v-model="formData.doc" ref="docInput" />
-        <div v-if="errors.doc" class="text-danger mt-1">{{ errors.doc }}</div>
-      </div>
-
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" placeholder="seu@email.com" v-model="formData.email" />
-        <div v-if="errors.email" class="text-danger mt-1">{{ errors.email }}</div>
-      </div>
-
-      <div class="mb-3">
-        <label for="phone" class="form-label">Telefone</label>
-        <input type="tel" class="form-control" id="phone" placeholder="(xx) xxxxx-xxxx" v-model="formData.phone" ref="phoneInput" />
-        <div v-if="errors.phone" class="text-danger mt-1">{{ errors.phone }}</div>
-      </div>
-
-      <div class="mb-3 text-center">
-        <div v-if="successMessage" class="text-success mb-2">{{ successMessage }}</div>
-        <div v-if="errorMessage" class="text-danger mb-2">{{ errorMessage }}</div>
-      </div>
-
-      <div class="text-end">
-        <button type="button" class="btn btn-outline-secondary me-2" :disabled="loading">Cancelar</button>
-        <button type="submit" class="btn btn-primary" :disabled="loading">
-          <span v-if="loading" class="spinner-border spinner-border-sm me-1"></span>
-          Enviar
-        </button>
-      </div>
-    </form>
-  </div>
-</template>
