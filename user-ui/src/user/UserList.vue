@@ -129,6 +129,10 @@ import AppHeader from '@/shared/AppHeader.vue';
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_URL
+});
+
 const users = ref<any[]>([]);
 const loading = ref(false);
 const errorMessage = ref('');
@@ -143,7 +147,7 @@ onMounted(async () => {
 const fetchUsers = async () => {
   loading.value = true;
   try {
-    const response = await axios.get('http://localhost:8080/users');
+    const response = await api.get('/users');
     users.value = response.data;
   } catch (error: any) {
     errorMessage.value = 'Erro ao carregar usuários.';
@@ -158,7 +162,7 @@ const deleteUser = async (index: number) => {
   loading.value = true;
   try {
     const userId = users.value[index].id;
-    await axios.delete(`http://localhost:8080/users/${userId}`);
+    await api.delete(`users/${userId}`);
     users.value.splice(index, 1);
   } catch (error: any) {
     errorMessage.value = 'Erro ao deletar usuário.';
@@ -181,7 +185,7 @@ const cancelEditing = () => {
 const saveUser = async (index: number) => {
   try {
     const userId = users.value[index].id;
-    await axios.put(`http://localhost:8080/users/${userId}`, editableUser.value, {
+    await api.put(`/users/${userId}`, editableUser.value, {
       headers: { 'Content-Type': 'application/json' }
     });
     users.value[index] = { ...editableUser.value };

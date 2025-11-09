@@ -56,6 +56,10 @@ import { onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
 import IMask from 'imask';
 
+const api = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_URL
+});
+
 const phoneInput = ref<HTMLInputElement | null>(null);
 const docInput = ref<HTMLInputElement | null>(null);
 
@@ -135,7 +139,7 @@ const handleSubmit = async (e: Event) => {
   errorMessage.value = '';
 
   try {
-    const response = await axios.post('http://localhost:8080/users', formData, {
+    const response = await api.post('/users', formData, {
       headers: { 'Content-Type': 'application/json' }
     });
 
