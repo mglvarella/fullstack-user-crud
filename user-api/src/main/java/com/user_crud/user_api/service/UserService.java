@@ -39,6 +39,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("The user " + id + " could not be found"));
 
         user.setName(data.name());
+        user.setDoc(data.doc());
         user.setEmail(data.email());
         user.setPhone(data.phone());
 
