@@ -46,3 +46,7 @@ http://localhost:3000
 ```bash
 http://localhost:8080
 ```
+### Swagger para o backend:
+```bash
+http://localhost:8080/swagger-ui/index.html
+```
