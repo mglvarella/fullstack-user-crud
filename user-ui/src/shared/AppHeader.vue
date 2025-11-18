@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #18CBBF">
     <div class="container">
-      <a class="navbar-brand" href="#">Meu App</a>
+      <a class="navbar-brand" href="#">User CRUD</a>
       <button
         class="navbar-toggler"
         type="button"
